@@ -6,25 +6,24 @@
 
     <form @submit.prevent="grava">
       <div class="controle">
+        <!-- v-model faz a mesma coisa que @input="foto.titulo = $event.target.value"
+          , que é o data-bind Utilizando o
+         -->
         <label for="titulo">TÍTULO</label>
-        <input id="titulo" 
-          @input="foto.titulo = $event.target.value" autocomplete="off" 
-          :value="foto.titulo">
+        <input v-model.lazy="foto.titulo" id="titulo" autocomplete="off">
       </div>
 
       <div class="controle">
         <label for="url">URL</label>
-        <input id="url" 
-          @input="foto.url = $event.target.value" autocomplete="off" 
-          :value="foto.url">
-        <imagem-responsiva/>
+        <input v-model.lazy="foto.url" id="url" autocomplete="off">
+        <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo"/>
       </div>
 
       <div class="controle">
         <label for="descricao">DESCRIÇÃO</label>
         <textarea id="descricao"
-          @input="foto.descricao = $event.target.value" autocomplete="off"
-          :value="foto.descricao"></textarea>
+          v-model="foto.descricao"
+          autocomplete="off"></textarea>
       </div>
 
       <div class="centralizado">
@@ -39,6 +38,7 @@
 
 import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue'
 import Botao from '../shared/botao/Botao.vue';
+import Foto from '../../domain/Foto/Foto.js';
 
 export default {
 
@@ -50,22 +50,16 @@ export default {
 
   data() {
     return {
-      foto: {
-        titulo:'',
-        url: '',
-        descricao: ''
-      }  
+      foto: new Foto()  
     }
   },
   
   methods: {
     grava() {
-      console.log(this.foto);
-      this.foto = {
-          titulo: '',
-          url: '',
-          descricao: ''
-      };
+      // Então enviamos os dados e se estiver ok cadastramos a foto senão retornamos
+      // o erro do servidor
+      this.$http.post('http://localhost:3000/v1/fotos', this.foto)
+      .then(() => this.foto = new Foto(), err => console.log(err))
     }
   }
 
