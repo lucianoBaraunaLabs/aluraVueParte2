@@ -3,7 +3,6 @@
   <div>
     <h1 class="centralizado">Cadastro</h1>
     <h2 class="centralizado">{{ foto.titulo }}</h2>
-
     <form @submit.prevent="grava">
       <div class="controle">
         <!-- v-model faz a mesma coisa que @input="foto.titulo = $event.target.value"
@@ -28,7 +27,7 @@
 
       <div class="centralizado">
         <meu-botao rotulo="GRAVAR" tipo="submit"/>
-        <router-link to="/"><meu-botao rotulo="VOLTAR" tipo="button"/></router-link>
+        <router-link :to="{name: 'home'}"><meu-botao rotulo="VOLTAR" tipo="button"/></router-link>
       </div>
 
     </form>
@@ -39,6 +38,7 @@
 import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue'
 import Botao from '../shared/botao/Botao.vue';
 import Foto from '../../domain/Foto/Foto.js';
+import FotoService from '../../domain/Foto/FotoService.js';
 
 export default {
 
@@ -56,10 +56,15 @@ export default {
   
   methods: {
     grava() {
-      // Então enviamos os dados e se estiver ok cadastramos a foto senão retornamos
-      // o erro do servidor
-      this.$http.post('http://localhost:3000/v1/fotos', this.foto)
-      .then(() => this.foto = new Foto(), err => console.log(err))
+      console.log(this.foto);
+       this.service
+        .cadastra(this.foto)
+        .then(() => this.foto = new Foto(), err => console.log(err));
+
+    },
+    created() {
+
+      this.service = new FotoService(this.$resource);
     }
   }
 
