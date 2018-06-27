@@ -1,4 +1,5 @@
-import Cadastro from './components/cadastro/Cadastro.vue';
+// import Cadastro from './components/cadastro/Cadastro.vue';
+const Cadastro = () => System.import('./components/cadastro/Cadastro.vue') // Code Spliting lazloading
 import Home from './components/home/Home.vue';
 
 export const routes = [
