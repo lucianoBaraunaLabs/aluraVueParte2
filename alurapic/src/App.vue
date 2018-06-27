@@ -23,7 +23,8 @@ export default {
   data() {
 
     return {
-      routes: routes.filter(route => route.menu)
+
+      routes : routes.filter(route => route.menu)
     }
   }
 }

@@ -3,36 +3,35 @@
   <div>
     <h1 class="centralizado">Cadastro</h1>
     <h2 class="centralizado">{{ foto.titulo }}</h2>
-    <form @submit.prevent="grava">
+
+    <form @submit.prevent="grava()">
+
       <div class="controle">
-        <!-- v-model faz a mesma coisa que @input="foto.titulo = $event.target.value"
-          , que é o data-bind Utilizando o
-         -->
         <label for="titulo">TÍTULO</label>
-        <input v-model.lazy="foto.titulo" id="titulo" autocomplete="off">
+        <input id="titulo" autocomplete="off" v-model.lazy="foto.titulo">
       </div>
 
       <div class="controle">
         <label for="url">URL</label>
-        <input v-model.lazy="foto.url" id="url" autocomplete="off">
+        <input id="url" autocomplete="off" v-model.lazy="foto.url">
         <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo"/>
       </div>
 
       <div class="controle">
         <label for="descricao">DESCRIÇÃO</label>
-        <textarea id="descricao"
-          v-model="foto.descricao"
-          autocomplete="off"></textarea>
+        <textarea id="descricao" autocomplete="off" v-model="foto.descricao">
+        </textarea>
       </div>
 
       <div class="centralizado">
         <meu-botao rotulo="GRAVAR" tipo="submit"/>
-        <router-link :to="{name: 'home'}"><meu-botao rotulo="VOLTAR" tipo="button"/></router-link>
+        <router-link :to="{ name: 'home'}"><meu-botao rotulo="VOLTAR" tipo="button"/></router-link>
       </div>
 
     </form>
   </div>
 </template>
+
 <script>
 
 import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue'
@@ -49,25 +48,27 @@ export default {
   },
 
   data() {
-    return {
-      foto: new Foto()  
-    }
-  },
-  
-  methods: {
-    grava() {
-      console.log(this.foto);
-       this.service
-        .cadastra(this.foto)
-        .then(() => this.foto = new Foto(), err => console.log(err));
 
-    },
-    created() {
+      return {
+
+          foto: new Foto()
+      }
+  },
+
+  methods: {
+
+      grava() {
+
+          this.service
+            .cadastra(this.foto)
+            .then(() => this.foto = new Foto(), err => console.log(err));
+      }
+  },
+
+  created() {
 
       this.service = new FotoService(this.$resource);
-    }
   }
-
 }
 
 </script>
@@ -95,5 +96,4 @@ export default {
   .centralizado {
     text-align: center;
   }
-
 </style>
